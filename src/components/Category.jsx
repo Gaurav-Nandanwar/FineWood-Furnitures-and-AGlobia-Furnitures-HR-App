@@ -1,0 +1,56 @@
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { fontSize, spacing } from '../constants/dimensions';
+import { fontFamily } from '../constants/fonts';
+import { colors } from '../constants/colors';
+import { category } from '../data/category';
+
+const Category = ({ selectedCategory, handleUpdateCategory }) => { // ✅ fixed here
+  return (
+    <FlatList 
+      data={category}
+      renderItem={({ item }) => (
+        <TouchableOpacity 
+          onPress={() => {
+            handleUpdateCategory(item.name); // ✅ you already have the function
+          }}
+        >
+          <Text 
+            style={[
+              styles.categoryText,
+              selectedCategory === item.name && { color: colors.purple }
+            ]}
+          >
+            {item.name}
+          </Text>
+
+          {selectedCategory === item.name && (
+            <View style={styles.underLine} />
+          )}
+        </TouchableOpacity>
+      )}
+      keyExtractor={(item) => item.id.toString()}
+      horizontal
+      ItemSeparatorComponent={() => (
+        <View style={{ paddingHorizontal: spacing.sm }} />
+      )}
+      showsHorizontalScrollIndicator={false}
+    />
+  );
+};
+
+export default Category;
+
+const styles = StyleSheet.create({
+  categoryText: {
+    fontSize: fontSize.md,
+    fontFamily: fontFamily.semiBold,
+    color: colors.gray,
+  },
+  underLine: {
+    borderBottomColor: colors.purple,
+    borderBottomWidth: 2,
+    width: "50%",
+    marginTop: spacing.sm,
+  },
+});
